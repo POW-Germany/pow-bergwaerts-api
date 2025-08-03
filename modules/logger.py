@@ -1,16 +1,10 @@
-import json
 import logging
 
 
-class JsonFormatter(logging.Formatter):
+class ElegantFormatter(logging.Formatter):
     def format(self, record):
-        log_record = {
-            "severity": record.levelname,
-            "message": record.getMessage(),
-            "logger": record.name,
-            "time": self.formatTime(record, self.datefmt),
-        }
-        return json.dumps(log_record)
+        log_record = f"{record.levelname} | {self.formatTime(record, self.datefmt)} | {record.name} | {record.getMessage()}"
+        return log_record
 
 
 class Logger:
@@ -20,7 +14,7 @@ class Logger:
         if not self.logger.handlers:
             handler = logging.StreamHandler()
             handler.setLevel(logging.DEBUG)
-            handler.setFormatter(JsonFormatter())
+            handler.setFormatter(ElegantFormatter())
             self.logger.addHandler(handler)
         self.logger.propagate = False
 
